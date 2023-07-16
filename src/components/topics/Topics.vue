@@ -7,7 +7,7 @@ import VueImage from '../../assets/vue.svg'
 const router = useRouter()
 const topicStore = useTopicsStore()
 
-onMounted(async () => {
+onMounted( async () => {
   await topicStore.fetchTopics()
 })
 
@@ -18,8 +18,11 @@ const topicDetail = (id) => {
 
 <template>
 <div class="my-3 p-3 bg-body rounded shadow-sm">
-    <h6 class="border-bottom pb-2 mb-0">{{ topicStore.total }} Topics</h6>
-   <div class="table-responsive">
+  <div v-if="topicStore.loading" class="spinner-border text-primary wh-7" role="status">
+  <span class="visually-hidden">Loading...</span>
+</div>
+   <div v-else class="table-responsive">
+     <h6 class="border-bottom pb-2 mb-0">{{ topicStore.total }} Topics</h6>
      <table class="table table-borderless table-hover">
        <thead>
     <tr>
@@ -51,5 +54,9 @@ const topicDetail = (id) => {
 </template>
 
 <style scoped>
+.wh-7 {
+  width: 7rem;
+  height: 7rem;
+}
 
 </style>

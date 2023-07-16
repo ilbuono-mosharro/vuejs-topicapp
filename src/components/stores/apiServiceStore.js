@@ -5,6 +5,7 @@ const base_url = "http://127.0.0.1:8000/api/"
 export const useApiStore = defineStore("api", {
     state: () => ({
         data:null,
+        topic:null,
         success:null,
         failed:null,
         error:null,
@@ -16,6 +17,21 @@ export const useApiStore = defineStore("api", {
                 const response = await fetch(base_url + url)
                 if (response.ok) {
                     this.data = await response.json()
+                    this.success = true
+                } else {
+                    this.failed = true
+                }
+            } catch (e) {
+                this.error = e.message
+            } finally {
+                this.loading = false
+            }
+        },
+        async getSingle(url) {
+            try {
+                const response = await fetch(base_url + url)
+                if (response.ok) {
+                    this.topic = await response.json()
                     this.success = true
                 } else {
                     this.failed = true
