@@ -50,6 +50,5 @@ export const useApiStore = defineStore("api", {
         }
     },
     getters: {
-
     },
 })
