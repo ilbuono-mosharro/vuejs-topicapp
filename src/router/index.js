@@ -4,7 +4,7 @@ import Topic from "../components/topics/Topic.vue";
 
 const routes = [
   { path: '/', component: Home, name:"home" },
-  { path: '/topic/:id', component: Topic, name: "TopicDetail" },
+  { path: '/topic/:id', component: Topic, name: "topicDetail" },
 ]
 
 const router = createRouter({

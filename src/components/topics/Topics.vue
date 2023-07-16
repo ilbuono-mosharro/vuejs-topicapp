@@ -1,14 +1,19 @@
 <script setup>
 import {useTopicsStore} from "../stores/topicsStore.js";
+import {useRouter} from "vue-router";
 import {onMounted} from "vue";
 import VueImage from '../../assets/vue.svg'
 
-
+const router = useRouter()
 const topicStore = useTopicsStore()
 
 onMounted(async () => {
   await topicStore.fetchTopics()
 })
+
+const topicDetail = (id) => {
+  router.push({name:"topicdetail", params:{id}})
+}
 </script>
 
 <template>
@@ -29,7 +34,9 @@ onMounted(async () => {
   </thead>
   <tbody>
     <tr v-for="(topic, index) in topicStore.data" :key="index">
-      <th scope="row" class="fw-normal">{{topic.subject}}</th>
+      <th scope="row" class="fw-normal">
+        <router-link :to="`/topic/${topic.id}`">{{topic.subject}}</router-link>
+      </th>
       <th class="fw-normal">{{topic.category.name}}</th>
       <th><img :src="topic.starter.avatar ? topic.starter.avatar : VueImage" class="img-fluid rounded-5" width="35" height="25" alt="" /></th>
       <th class="fw-normal">2</th>

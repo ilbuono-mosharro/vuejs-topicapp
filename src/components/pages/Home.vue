@@ -1,12 +1,10 @@
 <script setup>
-import Base from "../Base.vue";
 import VueImage from '../../assets/vue.svg'
 import DjangoImage from '../../assets/django-logo-positive.svg'
 import Topics from "../topics/Topics.vue";
 </script>
 
 <template>
-<Base>
   <div class="d-flex align-items-center justify-content-around flex-row p-3 my-3 text-white bg-purple rounded shadow-sm">
     <div class="lh-1">
       <img class="me-3" :src="DjangoImage" alt="" width="100" height="38">
@@ -18,7 +16,6 @@ import Topics from "../topics/Topics.vue";
       </div>
   </div>
   <Topics />
-</Base>
 </template>
 
 <style>
