@@ -1,19 +1,14 @@
 <script setup>
 import {useTopicsStore} from "../stores/topicsStore.js";
-import {useRouter} from "vue-router";
 import {onMounted} from "vue";
 import VueImage from '../../assets/vue.svg'
 
-const router = useRouter()
 const topicStore = useTopicsStore()
 
 onMounted( async () => {
   await topicStore.fetchTopics()
 })
 
-const topicDetail = (id) => {
-  router.push({name:"topicdetail", params:{id}})
-}
 </script>
 
 <template>
@@ -53,7 +48,7 @@ const topicDetail = (id) => {
   </div>
 </template>
 
-<style scoped>
+<style>
 .wh-7 {
   width: 7rem;
   height: 7rem;

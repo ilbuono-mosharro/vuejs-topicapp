@@ -19,10 +19,6 @@ import Topics from "../topics/Topics.vue";
 </template>
 
 <style>
-html,
-body {
-  overflow-x: hidden; /* Prevent scroll on narrow devices */
-}
 
 body {
   padding-top: 56px;

@@ -5,11 +5,14 @@ const base_url = "http://127.0.0.1:8000/api/"
 export const useApiStore = defineStore("api", {
     state: () => ({
         data:null,
+        id:null,
         topic:null,
         success:null,
         failed:null,
         error:null,
         loading:true,
+        upvote:null,
+        downvote:null,
     }),
     actions: {
         async get(url) {
@@ -42,7 +45,7 @@ export const useApiStore = defineStore("api", {
                 this.loading = false
             }
         },
-        async postOrputOrdelete(url, method, token, data) {
+        async put(url, method, token, data) {
             try {
                 const response = await fetch(base_url + url, {
                     method: method,
@@ -55,6 +58,8 @@ export const useApiStore = defineStore("api", {
                 if (response.ok) {
                     this.data = await response.json()
                     this.success = true
+                    this.upvote = data.upvote_count
+                    this.downvote = 0
                 } else {
                     this.failed = true
                 }
