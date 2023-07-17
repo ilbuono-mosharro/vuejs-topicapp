@@ -6,14 +6,14 @@ const token = localStorage.getItem('token') || null
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        loading: false,
+        loading: null,
         error: null,
         token: token,
     }),
     actions: {
         async login(payload) {
+            this.loading = true
             try {
-                this.loading = true
                 const response = await axios.post(`${BaseUrl}/accounts/api-token-auth/`, payload)
                 this.token = response.data
                 localStorage.setItem('token', this.token.token);
