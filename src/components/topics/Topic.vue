@@ -5,18 +5,22 @@ import {onMounted} from "vue";
 import VueImage from "../../assets/vue.svg";
 import LikeImage from "../../assets/hand-thumbs-up.svg"
 import DisLikeImage from "../../assets/hand-thumbs-down.svg"
+
 const route = useRoute()
 const topicStore = useTopicsStore()
+const token = localStorage.getItem('token')
 
 onMounted(async () => {
    await topicStore.singleTopic(Number(route.params.id))
 })
 
+
+
 const upVoteSubmit = async () => {
-  await topicStore.upvoteTopic(Number(route.params.id), `Token 2e1ac452914e0e171fc5846862c38e6c41ff4b2e`)
+  await topicStore.upvoteTopic(Number(route.params.id), `Token ${token}`)
 }
 const downVoteSubmit = async () => {
-  await topicStore.downvoteTopic(Number(route.params.id), `Token 2e1ac452914e0e171fc5846862c38e6c41ff4b2e`)
+  await topicStore.downvoteTopic(Number(route.params.id), `Token ${token}`)
 }
 
 </script>

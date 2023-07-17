@@ -1,12 +1,13 @@
 import {defineStore} from 'pinia'
 
 const BaseUrl = "http://127.0.0.1:8000/api"
+const token = localStorage.getItem('token') || null
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         loading: false,
         error: null,
-        token: localStorage.getItem('token') || null,
+        token: token,
     }),
     actions: {
         async login(data) {
@@ -37,7 +38,7 @@ export const useAuthStore = defineStore('auth', {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
-                        "Authorization": `token ${this.token.token}`,
+                        "Authorization": `Token ${token}`,
                     },
                 })
                 if (response.ok) {
@@ -52,7 +53,7 @@ export const useAuthStore = defineStore('auth', {
     },
     getters: {
         isAuthenticated: (state) => {
-            return state.token.token !== null;
+            return state.token !== null;
         },
     },
 })
