@@ -119,7 +119,7 @@ export const useTopicsStore = defineStore('topics', {
                 } else if (response.status === 400) {
                     this.error = await response.json();
                 } else {
-                    throw new Error("An error occurred while send the data");
+                   this.error = "An error occurred while delete the data"
                 }
             } catch (error) {
                 console.log(error);
@@ -130,7 +130,7 @@ export const useTopicsStore = defineStore('topics', {
         async deleteTopic(id) {
             try {
                 this.submitLoading = true;
-                const response = await fetch(`${base_url}/topics/${id}`, {
+                const response = await fetch(`${base_url}/topics/${id}/`, {
                     method: "DELETE",
                     headers: {
                         "Content-Type": "application/json",
@@ -140,13 +140,39 @@ export const useTopicsStore = defineStore('topics', {
                 });
 
                 if (response.ok) {
-                    this.topicForm = await response.json();
                     this.success = true;
                     console.log(this.topicForm)
                 } else if (response.status === 400) {
                     this.error = await response.json();
                 } else {
-                    throw new Error("An error occurred while delete the data");
+                    this.error = "An error occurred while delete the data"
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.submitLoading = false;
+            }
+        },
+        async updateTopic(id, payload) {
+            try {
+                this.submitLoading = true;
+                const response = await fetch(`${base_url}/topics/${id}/`, {
+                    method: "PUT",
+                    headers: {
+                        "Content-Type": "application/json",
+                         "Authorization": `Token ${token}`
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    this.topicForm = await response.json();
+                    this.success = true;
+                    console.log(this.success)
+                } else if (response.status === 400) {
+                    this.error = await response.json();
+                } else {
+                    this.error = "An error occurred while delete the data"
                 }
             } catch (error) {
                 console.log(error);

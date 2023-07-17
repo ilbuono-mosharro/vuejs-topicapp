@@ -11,6 +11,7 @@ onMounted( async () => {
 
 const deleteTopic = async (id) => {
   await topicStore.deleteTopic(id)
+  await topicStore.fetchTopics()
 }
 
 </script>
@@ -56,6 +57,9 @@ const deleteTopic = async (id) => {
         <form @submit="deleteTopic(topic.id)">
           <button class="btn btn-danger btn-sm">Delete</button>
         </form>
+      </th>
+       <th>
+        <router-link :to="`/topic/update/${topic.id}`" class="btn btn-warning btn-sm">Update</router-link>
       </th>
     </tr>
   </tbody>
