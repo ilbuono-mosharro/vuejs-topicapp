@@ -1,12 +1,14 @@
 <script setup>
 import {useAuthStore} from "../../stores/authStore.js";
 import {useRouter} from "vue-router";
-import router from "../../router/index.js";
+
 const authStore = useAuthStore()
+const router = useRouter()
 const handleLogout = async () => {
   await authStore.logOut()
+  localStorage.removeItem("token")
   authStore.token = null
-  router.push('/login')
+  await router.push('/login')
 }
 </script>
 

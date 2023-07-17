@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+import axios from 'axios'
 
 const BaseUrl = "http://127.0.0.1:8000/api"
 const token = localStorage.getItem('token') || null
@@ -10,50 +11,32 @@ export const useAuthStore = defineStore('auth', {
         token: token,
     }),
     actions: {
-        async login(data) {
+        async login(payload) {
             try {
                 this.loading = true
-                const response = await fetch(`${BaseUrl}/accounts/api-token-auth/`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(data)
-                })
-                if (response.ok) {
-                    this.token = await response.json()
-                    localStorage.setItem('token', this.token.token);
-                } else {
-                    this.error = true
-                }
+                const response = await axios.post(`${BaseUrl}/accounts/api-token-auth/`, payload)
+                this.token = response.data
+                localStorage.setItem('token', this.token.token);
             } catch (e) {
-                this.error = true
+                this.error = e.message
             } finally {
                 this.loading = false
             }
         },
         async logOut() {
             try {
-                const response = await fetch(`${BaseUrl}/accounts/logout/`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": `Token ${token}`,
-                    },
-                })
-                if (response.ok) {
-                    localStorage.removeItem("token")
-                } else {
-                    this.error = "Something went wrong, try again later."
-                }
+                const response = await axios.post(`${BaseUrl}/accounts/logout/`)
+                this.token = response.data
             } catch (e) {
-
+                this.error = e.message
+            } finally {
+                this.loading = false
             }
-        }
+        },
     },
     getters: {
         isAuthenticated: (state) => {
-            return state.token !== null;
+            return state?.token !== null;
         },
     },
 })
