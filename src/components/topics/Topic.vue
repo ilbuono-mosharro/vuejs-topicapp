@@ -1,6 +1,6 @@
 <script setup>
 import {useRoute} from "vue-router";
-import {useTopicsStore} from "../stores/topicsStore.js";
+import {useTopicsStore} from "../../stores/topicsStore.js";
 import {onMounted} from "vue";
 import VueImage from "../../assets/vue.svg";
 import LikeImage from "../../assets/hand-thumbs-up.svg"

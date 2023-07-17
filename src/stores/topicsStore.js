@@ -12,6 +12,7 @@ export const useTopicsStore = defineStore('topics', {
             loading: true,
             upvote:null,
             downvote:null,
+            voteid:null,
         }
     ),
     actions: {
@@ -56,10 +57,10 @@ export const useTopicsStore = defineStore('topics', {
                     body: JSON.stringify({}),
                 })
                 if (response.ok) {
-                    this.topic = await response.json()
+                    this.voteid = await response.json()
                     this.success = true
-                     this.upvote = this.topic.upvote_count
-                    this.downvote = this.topic.downvote_count
+                     this.upvote = this.voteid.upvote_count
+                    this.downvote = this.voteid.downvote_count
                 } else {
                     this.failed = true
                 }
@@ -80,10 +81,10 @@ export const useTopicsStore = defineStore('topics', {
                     body: JSON.stringify({}),
                 })
                 if (response.ok) {
-                    this.topic = await response.json()
+                    this.voteid = await response.json()
                     this.success = true
-                    this.downvote = this.topic.downvote_count
-                    this.upvote = this.topic.upvote_count
+                    this.downvote = this.voteid.downvote_count
+                    this.upvote = this.voteid.upvote_count
                 } else {
                     this.failed = true
                 }
