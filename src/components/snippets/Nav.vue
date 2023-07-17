@@ -40,8 +40,8 @@ const handleLogout = async () => {
           </ul>
         </li>
       </ul>
-      <button class="btn btn-primary me-3" @click="handleLogout">Log out</button>
-      <router-link to="/login" class="btn btn-warning">Login</router-link>
+      <button v-if="authStore.token" class="btn btn-primary me-3" @click="handleLogout">Log out</button>
+      <router-link v-else to="/login" class="btn btn-warning">Login</router-link>
     </div>
   </div>
 </nav>
