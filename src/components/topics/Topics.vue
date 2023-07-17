@@ -17,7 +17,7 @@ onMounted( async () => {
   <span class="visually-hidden">Loading...</span>
 </div>
    <div v-else class="table-responsive">
-     <h6 class="border-bottom pb-2 mb-0">{{ topicStore.total }} Topics</h6>
+     <h5 class="border-bottom pb-2 mb-0 text-center">{{ topicStore.total }} Topics</h5>
      <table class="table table-borderless table-hover">
        <thead>
     <tr>
@@ -33,7 +33,7 @@ onMounted( async () => {
   <tbody>
     <tr v-for="(topic, index) in topicStore.data" :key="index">
       <th scope="row" class="fw-normal">
-        <router-link :to="`/topic/${topic.id}`">{{topic.subject}}</router-link>
+        <router-link :to="`/topic/${topic.id}`" class="text-dark text-decoration-none">{{topic.subject}}</router-link>
       </th>
       <th class="fw-normal">{{topic.category.name}}</th>
       <th><img :src="topic.starter.avatar ? topic.starter.avatar : VueImage" class="img-fluid rounded-5" width="35" height="25" alt="" /></th>

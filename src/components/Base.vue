@@ -4,7 +4,7 @@ import Nav from "./snippets/Nav.vue";
 
 <template>
   <Nav />
-  <main class="container">
+  <main class="container mt-5">
     <slot></slot>
   </main>
   <footer></footer>

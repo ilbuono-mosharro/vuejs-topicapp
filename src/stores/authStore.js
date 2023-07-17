@@ -1,16 +1,17 @@
 import {defineStore} from 'pinia'
-
+const BaseUrl = "http://127.0.0.1:8000/api"
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        loading: true,
+        loading: false,
         error: null,
         token: localStorage.getItem('token') || null,
     }),
     actions: {
-        async login(url, data) {
+        async login(data) {
             try {
-                const response = await fetch(url, {
+                this.loading = true
+                const response = await fetch(`${BaseUrl}/accounts/api-token-auth/`, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
@@ -19,17 +20,17 @@ export const useAuthStore = defineStore('auth', {
                 })
                 if (response.ok) {
                     this.token = await response.json()
-                    console.log(this.token + "token")
                     localStorage.setItem('token', this.token.token);
                 } else {
-                    console.log("credentail errors")
+                    this.error = true
                 }
             } catch (e) {
+                this.error = true
             } finally {
                 this.loading = false
             }
         },
-        async logOut(url, token) {
+        async logOut(url,token) {
             const response = await fetch(url, {
                 method: "POST",
                 headers: {

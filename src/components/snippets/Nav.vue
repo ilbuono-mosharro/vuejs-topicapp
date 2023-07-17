@@ -32,10 +32,7 @@
           </ul>
         </li>
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <router-link to="/login" class="btn btn-warning">Login</router-link>
     </div>
   </div>
 </nav>
