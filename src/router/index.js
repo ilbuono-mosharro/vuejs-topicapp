@@ -5,6 +5,7 @@ import Login from "../components/auth/Login.vue";
 import SignUp from "../components/accounts/SignUp.vue";
 import AddTopic from "../components/topics/AddTopic.vue";
 import UpdateTopic from "../components/topics/UpdateTopic.vue";
+import UserProfile from "../components/accounts/UserProfile.vue";
 
 const routes = [
   { path: '/', component: Home, name:"home" },
@@ -13,6 +14,7 @@ const routes = [
     { path: '/topic/update/:id', component: UpdateTopic, name: "topicUpdate" },
   { path: '/login', component: Login, name:"login" },
   { path: '/sign-up', component: SignUp, name:"signup" },
+  {path: '/profile/:id', component: UserProfile, name: "userProfile"},
 ]
 
 const router = createRouter({

@@ -19,18 +19,14 @@ const handleLogout = async () => {
     </button>
     <div class="navbar-collapse offcanvas-collapse" id="navbarsExampleDefault">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
+        <li class="nav-item ms-auto">
           <router-link class="nav-link" to="/">Home</router-link>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Notifications</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Profile</a>
-        </li>
-
       </ul>
-      <button v-if="authStore.token" class="btn btn-primary me-3" @click="handleLogout">Log out</button>
+      <div v-if="authStore.token">
+        <router-link :to="`/profile/${authStore.token}`" class="btn btn-light me-3">Profile</router-link>
+        <button class="btn btn-primary" @click="handleLogout">Log out</button>
+      </div>
       <div v-else class="button">
       <router-link to="/sign-up" class="btn btn-primary me-3">Sign Up</router-link>
       <router-link to="/login" class="btn btn-success">Login</router-link>

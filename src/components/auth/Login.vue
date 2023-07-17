@@ -6,8 +6,8 @@ import {useRouter} from "vue-router";
 import VueLogo from '../../assets/vue.svg'
 const authentication = useAuthStore()
 
-const username = ref('');
-const password = ref('');
+const username = ref();
+const password = ref();
 const closeButton = ref()
 const router = useRouter()
 const closeAlert = () => closeButton.value = false
@@ -15,6 +15,7 @@ const closeAlert = () => closeButton.value = false
 const LoginSubmit = async () => {
   await authentication.login({username:username.value, password:password.value})
   const auth = await authentication.token
+  console.log(authentication.data)
 
   if (auth) {
     router.push("/")

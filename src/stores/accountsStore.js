@@ -1,4 +1,6 @@
 import {defineStore} from 'pinia'
+const BaseUrl = "http://127.0.0.1:8000/api"
+const token = localStorage.getItem('token') || null
 
 export const useRegistrationStore = defineStore('accounts', {
     state: () => ({
@@ -39,5 +41,43 @@ export const useRegistrationStore = defineStore('accounts', {
                 this.loading = false;
             }
         },
+        async userProfile() {
+        try {
+            this.loading = true
+          const response = await fetch(`${BaseUrl}/accounts/${token}/`, {
+              method: "GET",
+              headers: {
+                  Authorization: `Token ${token}`,
+              },
+          })
+          if (response.ok) {
+            this.data = await response.json()
+          } else {
+            console.log("error")
+          }
+        } catch (e) {
+        } finally {
+          this.loading = false
+        }
+      },
+        async deleteProfile() {
+        try {
+            this.loading = true
+          const response = await fetch(`${BaseUrl}/accounts/${token}/`, {
+              method: "DELETE",
+              headers: {
+                  Authorization: `Token ${token}`,
+              },
+          })
+          if (response.ok) {
+            this.data = await response.json()
+          } else {
+            console.log("error")
+          }
+        } catch (e) {
+        } finally {
+          this.loading = false
+        }
+      },
     },
 })
