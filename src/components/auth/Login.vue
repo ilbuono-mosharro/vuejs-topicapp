@@ -14,13 +14,15 @@ const closeAlert = () => closeButton.value = false
 
 const LoginSubmit = async () => {
   await authentication.login({username:username.value, password:password.value})
-  if (authentication.isAuthenticated) {
+  const auth = await authentication.token
+
+  if (auth) {
     router.push("/")
   } else {
     closeButton.value = true
   }
-
 }
+
 </script>
 
 <template>

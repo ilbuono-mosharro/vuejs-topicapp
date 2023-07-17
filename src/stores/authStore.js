@@ -1,4 +1,5 @@
 import {defineStore} from 'pinia'
+
 const BaseUrl = "http://127.0.0.1:8000/api"
 
 export const useAuthStore = defineStore('auth', {
@@ -30,23 +31,28 @@ export const useAuthStore = defineStore('auth', {
                 this.loading = false
             }
         },
-        async logOut(url,token) {
-            const response = await fetch(url, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Token ${this.token}`,
-                },
-            })
-            if (response.ok) {
-                localStorage.removeItem("token")
+        async logOut() {
+            try {
+                const response = await fetch(`${BaseUrl}/accounts/logout/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": `token ${this.token.token}`,
+                    },
+                })
+                if (response.ok) {
+                    localStorage.removeItem("token")
+                } else {
+                    this.error = "Something went wrong, try again later."
+                }
+            } catch (e) {
+
             }
         }
     },
     getters: {
         isAuthenticated: (state) => {
-            return state.token !== null;
+            return state.token.token !== null;
         },
-        currentToken: (state) => state.token.value
     },
 })

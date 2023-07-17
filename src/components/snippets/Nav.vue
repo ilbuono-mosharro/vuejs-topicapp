@@ -1,5 +1,13 @@
 <script setup>
-
+import {useAuthStore} from "../../stores/authStore.js";
+import {useRouter} from "vue-router";
+import router from "../../router/index.js";
+const authStore = useAuthStore()
+const handleLogout = async () => {
+  await authStore.logOut()
+  authStore.token = null
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -32,6 +40,7 @@
           </ul>
         </li>
       </ul>
+      <button class="btn btn-primary me-3" @click="handleLogout">Log out</button>
       <router-link to="/login" class="btn btn-warning">Login</router-link>
     </div>
   </div>
