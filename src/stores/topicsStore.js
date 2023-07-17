@@ -1,5 +1,8 @@
 import {defineStore} from 'pinia'
 const base_url = "http://127.0.0.1:8000/api"
+const token = localStorage.getItem('token') || null
+
+console.log(token)
 
 export const useTopicsStore = defineStore('topics', {
     state: () => (
@@ -13,6 +16,8 @@ export const useTopicsStore = defineStore('topics', {
             upvote:null,
             downvote:null,
             voteid:null,
+            topicForm:null,
+            submitLoading:null,
         }
     ),
     actions: {
@@ -22,6 +27,7 @@ export const useTopicsStore = defineStore('topics', {
                 if (response.ok) {
                     this.data = await response.json()
                     this.success = true
+                    console.log(this.data)
                 } else {
                     this.failed = true
                 }
@@ -93,7 +99,61 @@ export const useTopicsStore = defineStore('topics', {
             } finally {
                 this.loading = false
             }
-        }
+        },
+        async addTopic(payload) {
+            try {
+                this.submitLoading = true;
+                const response = await fetch(`${base_url}/topics/`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                         "Authorization": `Token ${token}`
+                    },
+                    body: JSON.stringify(payload),
+                });
+
+                if (response.ok) {
+                    this.topicForm = await response.json();
+                    this.success = true;
+                    console.log(this.topicForm)
+                } else if (response.status === 400) {
+                    this.error = await response.json();
+                } else {
+                    throw new Error("An error occurred while send the data");
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.submitLoading = false;
+            }
+        },
+        async deleteTopic(id) {
+            try {
+                this.submitLoading = true;
+                const response = await fetch(`${base_url}/topics/${id}`, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json",
+                         "Authorization": `Token ${token}`
+                    },
+                    body: JSON.stringify(id),
+                });
+
+                if (response.ok) {
+                    this.topicForm = await response.json();
+                    this.success = true;
+                    console.log(this.topicForm)
+                } else if (response.status === 400) {
+                    this.error = await response.json();
+                } else {
+                    throw new Error("An error occurred while delete the data");
+                }
+            } catch (error) {
+                console.log(error);
+            } finally {
+                this.submitLoading = false;
+            }
+        },
     },
     getters: {
         total: (state) => state.data ? state.data.length : 0,

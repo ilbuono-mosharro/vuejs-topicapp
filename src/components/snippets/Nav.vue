@@ -28,17 +28,7 @@ const handleLogout = async () => {
         <li class="nav-item">
           <a class="nav-link" href="#">Profile</a>
         </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Switch account</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" data-bs-toggle="dropdown" aria-expanded="false">Settings</a>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Action</a></li>
-            <li><a class="dropdown-item" href="#">Another action</a></li>
-            <li><a class="dropdown-item" href="#">Something else here</a></li>
-          </ul>
-        </li>
+
       </ul>
       <button v-if="authStore.token" class="btn btn-primary me-3" @click="handleLogout">Log out</button>
       <div v-else class="button">

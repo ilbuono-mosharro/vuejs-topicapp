@@ -81,7 +81,7 @@ const handlesignUp = async () => {
           <span v-if="registrationStore.loading" class="spinner-border spinner-border-sm" role="status"
                 aria-hidden="true"></span>
           <span class="visually-hidden">Loading...</span>
-          Sign in
+          Sign up
         </button>
         <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2023</p>
       </form>
