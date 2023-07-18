@@ -4,7 +4,10 @@ import {useTopicsStore} from "../../stores/topicsStore.js";
 import {useCategoryStore} from "../../stores/categoriesStore.js";
 import VueLogo from "../../assets/vue.svg";
 import {useRoute} from "vue-router";
-
+import Alert from "../snippets/Alert.vue";
+import Field from "../snippets/Field.vue";
+import Button from "../snippets/Button.vue";
+const token = localStorage.getItem('token')
 const topicsStore = useTopicsStore()
 const categoryStore = useCategoryStore()
 const router= useRoute()
@@ -28,8 +31,8 @@ const handleupdateTopic = async () => {
     subject: subject.value,
     category: category.value,
     body: body.value,
-  })
-  if (topicsStore.success) {
+  }, `Token ${token}`)
+  if (topicsStore.updatetopic) {
     closeButton.value = true
   }
 }
@@ -38,21 +41,15 @@ const handleupdateTopic = async () => {
 <template>
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-md-6 col-lg-5">
-      <div v-if="topicsStore.success && closeButton" class="alert alert-warning alert-dismissible fade show"
-           role="alert">
-        You have successfully updated the topic.
-        <button type="button" class="btn-close" data-bs-dismiss="alert" @click="closeAlert" aria-label="Close"></button>
-      </div>
+      <Alert v-if="topicsStore.updatetopic && closeButton" class="alert alert-warning alert-dismissible fade show"
+             :closebutton="closeAlert" text="You have successfully updated the topic"/>
       <form @submit.prevent="handleupdateTopic">
         <div class="text-center">
           <img class="mb-4 " :src="VueLogo" alt="" width="72" height="57">
           <h1 class="h3 mb-3 fw-normal">Update the topic</h1>
         </div>
-        <div class="form-floating mb-4">
-          <input type="text" class="form-control" v-model="subject" placeholder="Subject" required>
-          <label for="floatingInput">Subject</label>
-          <!--          <p v-if="registrationStore.usernameError" class="text-danger">{{ registrationStore.usernameError }}</p>-->
-        </div>
+        <Field v-model="subject" type="text" class-input="form-control" placeholder="Subject" label-text="Subject"
+               required="required"/>
         <div class="form-floating mb-4">
           <select class="form-select" id="floatingSelect" v-model="category" aria-label="Floating label select example">
             <option disabled value="">Please select one</option>
@@ -60,16 +57,12 @@ const handleupdateTopic = async () => {
           </select>
           <label for="floatingSelect">Choose the category</label>
         </div>
-        <div class="form-floating mb-4">
-          <input type="text" class="form-control" v-model="body" placeholder="Last Name" required>
-          <label for="floatingInput">Description</label>
-        </div>
-        <button class="btn btn-primary w-100 py-2" type="submit">
-          <span v-if="topicsStore.submitLoading" class="spinner-border spinner-border-sm" role="status"
-                aria-hidden="true"></span>
-          <span class="visually-hidden">Loading...</span>
-          Add
-        </button>
+        <Field v-model="body" type="textarea" class-input="form-control" placeholder="Description"
+               label-text="Description"
+               required="required"/>
+        <Button class-name="btn btn-primary w-100 py-2" type="submit"
+                :text="topicsStore.submitLoading ? 'I am updateded the data' : 'Add'"
+                :disabled="!!topicsStore.submitLoading"/>
         <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2023</p>
       </form>
     </div>

@@ -1,36 +1,34 @@
 import {defineStore} from 'pinia'
-const base_url = "http://127.0.0.1:8000/api"
-const token = localStorage.getItem('token') || null
+import axios from "axios";
 
-console.log(token)
+const base_url = "http://127.0.0.1:8000/api"
+
 
 export const useTopicsStore = defineStore('topics', {
     state: () => (
         {
             data: null,
-            topic:null,
-            success: null,
-            failed: null,
+            loading: false,
             error: null,
-            loading: true,
-            upvote:null,
-            downvote:null,
-            voteid:null,
-            topicForm:null,
-            submitLoading:null,
+            topic: null,
+            tloading: null,
+            terrors: null,
+            topicvote: null,
+            voteerrors: null,
+            upvote: null,
+            downvote: null,
+            topicForm: null,
+            deletetopic: null,
+            submitLoading: null,
+            updatetopic: null
         }
     ),
     actions: {
         async fetchTopics() {
-             try {
-                const response = await fetch(`${base_url}/topics/`)
-                if (response.ok) {
-                    this.data = await response.json()
-                    this.success = true
-                    console.log(this.data)
-                } else {
-                    this.failed = true
-                }
+            this.loading = true
+            try {
+                const response = await axios.get(`${base_url}/topics/`)
+                this.data = response.data
             } catch (e) {
                 this.error = e.message
             } finally {
@@ -38,144 +36,82 @@ export const useTopicsStore = defineStore('topics', {
             }
         },
         async singleTopic(id) {
+            this.tloading = true
             try {
-                const response = await fetch(`${base_url}/topics/${id}/`)
-                if (response.ok) {
-                    this.topic = await response.json()
-                    this.success = true
-                } else {
-                    this.failed = true
-                }
+                const response = await axios.get(`${base_url}/topics/${id}/`)
+                this.topic = response.data
             } catch (e) {
-                this.error = e.message
+                this.terrors = e.message
             } finally {
-                this.loading = false
+                this.tloading = false
             }
         },
         async upvoteTopic(id, token) {
-           try {
-                const response = await fetch(`${base_url}/topics/${id}/user-upvote/`, {
-                    method: "POST",
+            try {
+                const response = await axios.post(`${base_url}/topics/${id}/user-upvote/`, {}, {
                     headers: {
-                        "Content-Type": "application/json",
                         "Authorization": token,
                     },
-                    body: JSON.stringify({}),
                 })
-                if (response.ok) {
-                    this.voteid = await response.json()
-                    this.success = true
-                     this.upvote = this.voteid.upvote_count
-                    this.downvote = this.voteid.downvote_count
-                } else {
-                    this.failed = true
-                }
+                this.topicvote = response.data
+                this.upvote = this.topicvote.upvote_count
+                this.downvote = this.topicvote.downvote_count
             } catch (e) {
-                this.error = e.message
-            } finally {
-                this.loading = false
+                this.voteerrors = e.message
             }
         },
         async downvoteTopic(id, token) {
-           try {
-                const response = await fetch(`${base_url}/topics/${id}/user-downvote/`, {
-                    method: "POST",
+            try {
+                const response = await axios.post(`${base_url}/topics/${id}/user-downvote/`, {}, {
                     headers: {
-                        "Content-Type": "application/json",
                         "Authorization": token,
                     },
-                    body: JSON.stringify({}),
                 })
-                if (response.ok) {
-                    this.voteid = await response.json()
-                    this.success = true
-                    this.downvote = this.voteid.downvote_count
-                    this.upvote = this.voteid.upvote_count
-                } else {
-                    this.failed = true
-                }
+                this.topicvote = response.data
+                this.downvote = this.topicvote.downvote_count
+                this.upvote = this.topicvote.upvote_count
+            } catch (e) {
+                this.voteerrors = e.message
+            }
+        },
+        async addTopic(payload, token) {
+            this.submitLoading = true;
+            try {
+                const response = await axios.post(`${base_url}/topics/`, payload, {
+                    headers: {
+                        "Authorization": token,
+                    },
+                })
+                this.topicForm = response.data
             } catch (e) {
                 this.error = e.message
             } finally {
-                this.loading = false
-            }
-        },
-        async addTopic(payload) {
-            try {
-                this.submitLoading = true;
-                const response = await fetch(`${base_url}/topics/`, {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                         "Authorization": `Token ${token}`
-                    },
-                    body: JSON.stringify(payload),
-                });
-
-                if (response.ok) {
-                    this.topicForm = await response.json();
-                    this.success = true;
-                    console.log(this.topicForm)
-                } else if (response.status === 400) {
-                    this.error = await response.json();
-                } else {
-                   this.error = "An error occurred while delete the data"
-                }
-            } catch (error) {
-                console.log(error);
-            } finally {
                 this.submitLoading = false;
             }
         },
-        async deleteTopic(id) {
+        async deleteTopic(id, token) {
             try {
-                this.submitLoading = true;
-                const response = await fetch(`${base_url}/topics/${id}/`, {
-                    method: "DELETE",
+                const response = await axios.delete(`${base_url}/topics/${id}/`, {
                     headers: {
-                        "Content-Type": "application/json",
-                         "Authorization": `Token ${token}`
+                        "Authorization": token,
                     },
-                    body: JSON.stringify(id),
-                });
-
-                if (response.ok) {
-                    this.success = true;
-                    console.log(this.topicForm)
-                } else if (response.status === 400) {
-                    this.error = await response.json();
-                } else {
-                    this.error = "An error occurred while delete the data"
-                }
-            } catch (error) {
-                console.log(error);
-            } finally {
-                this.submitLoading = false;
+                })
+                this.deletetopic = response.data
+            } catch (e) {
+                this.error = e.message
             }
         },
-        async updateTopic(id, payload) {
+        async updateTopic(id, payload, token) {
+            this.submitLoading = true;
             try {
-                this.submitLoading = true;
-                const response = await fetch(`${base_url}/topics/${id}/`, {
-                    method: "PUT",
+                const response = await axios.put(`${base_url}/topics/${id}/`, payload, {
                     headers: {
-                        "Content-Type": "application/json",
-                         "Authorization": `Token ${token}`
+                        "Authorization": token,
                     },
-                    body: JSON.stringify(payload),
-                });
-
-                if (response.ok) {
-                    this.topicForm = await response.json();
-                    this.success = true;
-                    console.log(this.success)
-                } else if (response.status === 400) {
-                    this.error = await response.json();
-                } else {
-                    this.error = "An error occurred while delete the data"
-                }
-            } catch (error) {
-                console.log(error);
+                })
+                this.updatetopic = response.data
+            } catch (e) {
+                this.error = e.message
             } finally {
                 this.submitLoading = false;
             }

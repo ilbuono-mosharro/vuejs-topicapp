@@ -33,7 +33,7 @@ const LoginSubmit = async () => {
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-md-6 col-lg-5">
       <Alert v-if="authentication.error && closeButton" class="alert alert-warning alert-dismissible fade show"
-             :closebutton="closeAlert"/>
+             :closebutton="closeAlert" text="Unable to log in with provided credentials."/>
       <form @submit.prevent="LoginSubmit">
         <div class="text-center">
           <img class="mb-4 " :src="VueLogo" alt="" width="72" height="57">
