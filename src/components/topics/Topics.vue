@@ -3,12 +3,19 @@ import {useTopicsStore} from "../../stores/topicsStore.js";
 import {onMounted} from "vue";
 import VueImage from '../../assets/vue.svg'
 import Loader from "../snippets/Loader.vue";
-
+import {useRegistrationStore} from "../../stores/accountsStore.js";
 const token = localStorage.getItem('token')
+
 const topicStore = useTopicsStore()
+const user = useRegistrationStore()
+
+
 
 onMounted(async () => {
   await topicStore.fetchTopics()
+  if (token) {
+    await user.userProfile(`Token ${token}`)
+  }
 })
 
 const deleteTopic = async (id) => {
@@ -16,6 +23,18 @@ const deleteTopic = async (id) => {
   await topicStore.fetchTopics()
 }
 
+
+const showMyTopic = () => {
+  if (token) {
+    topicStore.data = topicStore.data.filter(topic => user?.profile?.username === topic?.starter?.username)
+    return topicStore.data
+  }
+}
+const showAll = async () => {
+  if (token) {
+    await topicStore.fetchTopics()
+  }
+}
 </script>
 
 <template>
@@ -29,6 +48,10 @@ const deleteTopic = async (id) => {
           <h5 class="border-bottom pb-2 mb-0 text-center">{{ topicStore.total }} Topics</h5>
         </div>
         <div class="p-2">
+          <button v-if="token" class="btn btn-link me-4" @click="showMyTopic">My topics</button>
+          <button v-if="token" class="btn btn-link" @click="showAll">Show All</button>
+        </div>
+        <div class="p-2">
           <router-link to="/topic/add" class="btn btn-success">Add Topic</router-link>
         </div>
       </div>
@@ -38,7 +61,6 @@ const deleteTopic = async (id) => {
           <th scope="col">Topic</th>
           <th scope="col">Category</th>
           <th scope="col"></th>
-          <th scope="col">Replies</th>
           <th scope="col">Likes</th>
           <th scope="col">Dislikes</th>
           <th scope="col">Published</th>
@@ -56,16 +78,15 @@ const deleteTopic = async (id) => {
             <img :src="topic?.starter?.avatar ? topic?.starter?.avatar : VueImage" class="img-fluid rounded-5" width="35"
                    height="25" alt=""/>
           </th>
-          <th class="fw-normal">2</th>
           <th class="fw-normal">{{ topic.upvote_count }}</th>
           <th class="fw-normal">{{ topic.downvote_count }}</th>
           <th class="fw-normal">{{ topic.created_data }}</th>
           <th>
-            <form @submit="deleteTopic(topic.id)">
+            <form v-if="token ? user?.profile?.username === topic?.starter?.username : false" @submit="deleteTopic(topic.id)">
               <button class="btn btn-danger btn-sm">Delete</button>
             </form>
           </th>
-          <th>
+          <th v-if="token ? user?.profile?.username === topic?.starter?.username : false">
             <router-link :to="`/topic/update/${topic.id}`" class="btn btn-warning btn-sm">Update</router-link>
           </th>
         </tr>

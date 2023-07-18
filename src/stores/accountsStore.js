@@ -1,20 +1,23 @@
 import {defineStore} from 'pinia'
 import axios from "axios";
+
 const base_url = "http://127.0.0.1:8000/api"
+
 
 export const useRegistrationStore = defineStore('accounts', {
     state: () => ({
-        created:null,
+        created: null,
         error: null,
         loading: false,
+        profile: null,
         success: null,
         data: null,
         usernameError: null,
         passwordError: null,
-        emailError:null,
+        emailError: null,
     }),
     actions: {
-         async signUp(payload) {
+        async signUp(payload) {
             this.loading = true;
             try {
                 const response = await axios.post(`${base_url}/accounts/sign-up/`, payload)
@@ -28,44 +31,36 @@ export const useRegistrationStore = defineStore('accounts', {
                 this.loading = false;
             }
         },
-      //   async userProfile() {
-      //   try {
-      //       this.loading = true
-      //     const response = await fetch(`${BaseUrl}/accounts/${token}/`, {
-      //         method: "GET",
-      //         headers: {
-      //             Authorization: `Token ${token}`,
-      //         },
-      //     })
-      //     if (response.ok) {
-      //       this.data = await response.json()
-      //     } else {
-      //       console.log("error")
-      //     }
-      //   } catch (e) {
-      //   } finally {
-      //     this.loading = false
-      //   }
-      // },
-      //   async deleteProfile() {
-      //   try {
-      //       this.loading = true
-      //     const response = await fetch(`${BaseUrl}/accounts/${token}/`, {
-      //         method: "DELETE" +
-      //             "",
-      //         headers: {
-      //             Authorization: `Token ${token}`,
-      //         },
-      //     })
-      //     if (response.ok) {
-      //       this.data = await response.json()
-      //     } else {
-      //       console.log("error")
-      //     }
-      //   } catch (e) {
-      //   } finally {
-      //     this.loading = false
-      //   }
-      // },
+        async userProfile(token) {
+            this.loading = true
+            try {
+                const response = await axios.get(`${base_url}/accounts/profile/`,
+                    {
+                        headers: {
+                            "Authorization": token,
+                        },
+                    })
+                this.profile = response.data
+            } catch (e) {
+                this.error = e.message
+            } finally {
+                this.loading = false
+            }
+        },
+        async deleteProfile(token) {
+            this.loading = true
+            try {
+                const response = await axios.delete(`${base_url}/accounts/profile/`,
+                    {
+                        headers: {
+                            "Authorization": token,
+                        },
+                    })
+            } catch (e) {
+                this.error = e.message
+            } finally {
+                this.loading = false
+            }
+        },
     },
 })

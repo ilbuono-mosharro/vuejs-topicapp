@@ -50,7 +50,7 @@ const downVoteSubmit = async () => {
               <div>
                 <form @submit.prevent="upVoteSubmit">
                   <button class="btn btn-light align-middle">
-                    {{ topicStore.upvote ? topicStore.upvote : topicStore.topic?.upvote_count }} Likes <img
+                    {{ topicStore.upvote ? topicStore?.upvote : topicStore?.topic?.upvote_count }} Likes <img
                       :src="LikeImage" alt=""/>
                   </button>
                 </form>
@@ -59,7 +59,7 @@ const downVoteSubmit = async () => {
             <div class="p-2">
               <form @submit.prevent="downVoteSubmit">
                 <button class="btn btn-light align-middle">
-                  {{ topicStore.downvote ? topicStore.downvote : topicStore.topic?.downvote_count }} Dislikes <img
+                  {{ topicStore.downvote ? topicStore?.downvote : topicStore?.topic?.downvote_count }} Dislikes <img
                     :src="DisLikeImage" alt=""/>
                 </button>
               </form>

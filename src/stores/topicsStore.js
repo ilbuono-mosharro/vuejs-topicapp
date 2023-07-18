@@ -119,6 +119,9 @@ export const useTopicsStore = defineStore('topics', {
     },
     getters: {
         total: (state) => state.data ? state.data.length : 0,
+        mytopic: (state) => {
+            return state.data.filter((topic, user) => topic?.starter?.username === user)
+        }
     },
 })
 

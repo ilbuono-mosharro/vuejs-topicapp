@@ -7,6 +7,7 @@ import AddTopic from "../components/topics/AddTopic.vue";
 import UpdateTopic from "../components/topics/UpdateTopic.vue";
 import UserProfile from "../components/accounts/UserProfile.vue";
 import {useAuthStore} from "../stores/authStore.js";
+import Deleted from "../components/accounts/Deleted.vue";
 
 const routes = [
     {path: '/', component: Home, name: "home"},
@@ -15,7 +16,8 @@ const routes = [
     {path: '/topic/update/:id', component: UpdateTopic, name: "topicUpdate", meta: { requiresAuth: true },},
     {path: '/login', component: Login, name: "login"},
     {path: '/sign-up', component: SignUp, name: "signup"},
-    {path: '/profile/:id', component: UserProfile, name: "userProfile", meta: { requiresAuth: true },},
+    {path: '/profile/:token', component: UserProfile, name: "userProfile", meta: { requiresAuth: true },},
+    {path: '/deleted', component: Deleted, name: "deleted"},
 ]
 
 const router = createRouter({
@@ -27,7 +29,6 @@ router.beforeEach((to) => {
     // ✅ This will work because the router starts its navigation after
     // the router is installed and pinia will be installed too
     const store = useAuthStore()
-
     if (to.meta.requiresAuth && !store.isAuthenticated) return '/login'
 })
 
