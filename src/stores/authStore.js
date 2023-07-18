@@ -23,7 +23,7 @@ export const useAuthStore = defineStore('auth', {
                 this.loading = false
             }
         },
-        async logOut() {
+        async logOut(token) {
             this.loading = true
             try {
                 const response = await axios.post(`${BaseUrl}/accounts/logout/`)
