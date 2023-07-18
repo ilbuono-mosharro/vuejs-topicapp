@@ -2,6 +2,9 @@
 import {ref} from "vue";
 import {useRegistrationStore} from "../../stores/accountsStore.js";
 import VueLogo from "../../assets/vue.svg";
+import Alert from "../snippets/Alert.vue";
+import Field from "../snippets/Field.vue";
+import Button from "../snippets/Button.vue";
 
 const registrationStore = useRegistrationStore()
 
@@ -23,7 +26,7 @@ const handlesignUp = async () => {
     password: password.value,
     password1: password1.value,
   })
-  if (registrationStore.success) {
+  if (registrationStore.created) {
     username.value = "", firstName.value = "",
         lastName.value = "", email.value = "",
         password.value = "", password1.value = "",
@@ -38,51 +41,31 @@ const handlesignUp = async () => {
 <template>
   <div class="row justify-content-center align-items-center">
     <div class="col-12 col-md-6 col-lg-5">
-      <div v-if="registrationStore.success && closeButton" class="alert alert-warning alert-dismissible fade show"
-           role="alert">
-        You have successfully registered, you can now log in at the following link.
-        <router-link to="/login" class="btn btn-link">Login</router-link>
-        <button type="button" class="btn-close" data-bs-dismiss="alert" @click="closeAlert" aria-label="Close"></button>
-      </div>
+     <Alert v-if="registrationStore.created && closeButton" class="alert alert-warning alert-dismissible fade show"
+             :closebutton="closeAlert" text="You have successfully registered, you can now log in."/>
       <form @submit.prevent="handlesignUp">
         <div class="text-center">
           <img class="mb-4 " :src="VueLogo" alt="" width="72" height="57">
           <h1 class="h3 mb-3 fw-normal">Sign Up</h1>
         </div>
-        <div class="form-floating mb-4">
-          <input type="text" class="form-control" v-model="username" placeholder="Username" required>
-          <label for="floatingInput">Username</label>
-          <p v-if="registrationStore.usernameError" class="text-danger">{{ registrationStore.usernameError }}</p>
-        </div>
-        <div class="form-floating mb-4">
-          <input type="text" class="form-control" v-model="firstName" placeholder="First Name" required>
-          <label for="floatingInput">First Name</label>
-        </div>
-        <div class="form-floating mb-4">
-          <input type="text" class="form-control" v-model="lastName" placeholder="Last Name" required>
-          <label for="floatingInput">Last Name</label>
-        </div>
-        <div class="form-floating mb-4">
-          <input type="email" class="form-control" v-model="email" placeholder="Email" required>
-          <label for="floatingInput">Email</label>
-          <p v-if="registrationStore.emailError" class="text-danger">{{ registrationStore.emailError }}</p>
-        </div>
-        <div class="form-floating mb-4">
-          <input type="password" class="form-control" v-model="password" placeholder="Password" required>
-          <label for="floatingPassword">Password</label>
-        </div>
-        <div class="form-floating mb-4">
-          <input type="password" class="form-control" v-model="password1" placeholder="Repeat Password" required>
-          <label for="floatingPassword">Repeat Password</label>
-          <p v-if="registrationStore.passwordError" class="text-danger">{{ registrationStore.passwordError }}</p>
-        </div>
-
-        <button class="btn btn-primary w-100 py-2" type="submit">
-          <span v-if="registrationStore.loading" class="spinner-border spinner-border-sm" role="status"
-                aria-hidden="true"></span>
-          <span class="visually-hidden">Loading...</span>
-          Sign up
-        </button>
+        <Field v-model="username" type="text" class-input="form-control" placeholder="Username" label-text="Username"
+               required="required"/>
+        <p v-if="registrationStore.usernameError" class="text-danger">{{ registrationStore.usernameError }}</p>
+        <Field v-model="firstName" type="text" class-input="form-control" placeholder="First Name" label-text="First Name"
+               required="required"/>
+        <Field v-model="lastName" type="text" class-input="form-control" placeholder="Last Name" label-text="Last Name"
+               required="required"/>
+        <Field v-model="email" type="text" class-input="form-control" placeholder="email" label-text="email"
+               required="required"/>
+        <p v-if="registrationStore.emailError" class="text-danger">{{ registrationStore.emailError }}</p>
+        <Field v-model="password" type="password" class-input="form-control" placeholder="Password"
+               label-text="Password" required="required"/>
+        <Field v-model="password1" type="password" class-input="form-control" placeholder="Repeat Password"
+               label-text="Repeat Password" required="required"/>
+        <p v-if="registrationStore.passwordError" class="text-danger">{{ registrationStore.passwordError }}</p>
+        <Button class-name="btn btn-primary w-100 py-2" type="submit"
+                :text="registrationStore.loading ? 'I\'m checking your data' : 'Sign up'"
+                :disabled="!!registrationStore.loading"/>
         <p class="mt-5 mb-3 text-body-secondary">&copy; 2017–2023</p>
       </form>
     </div>
